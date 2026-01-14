@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Database files
+test.db
+backend/test.db
+
+# OS / editor junk
+.DS_Store

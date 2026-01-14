@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Float, ForeignKey, DateTime
 from datetime import datetime
-from backend.app.db.session import Base
+from app.db.session import Base
 
 class ActualOutcome(Base):
     __tablename__ = "actual_outcomes"

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Float, ForeignKey, DateTime
 from datetime import datetime
-from backend.app.db.session import Base
+from app.db.session import Base
 
 class CostMetric(Base):
     __tablename__ = "cost_metrics"
