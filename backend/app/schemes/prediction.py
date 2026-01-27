@@ -3,9 +3,9 @@ from datetime import datetime
 
 class PredictionCreate(BaseModel):
     model_id: int
-    input_ref: str
-    predicted_value: float
-    confidence: float
+    
+    cost: float
+    benefit: float
 
 class PredictionOut(PredictionCreate):
     id: int
