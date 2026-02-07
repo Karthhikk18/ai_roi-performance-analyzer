@@ -1,73 +1,57 @@
 import { useState } from "react";
-import { createPrediction } from "../api/predictions";
+import "./PredictionForm.css";
 
-export default function PredictionForm() {
+export default function PredictionForm({ history, setHistory }) {
   const [cost, setCost] = useState("");
   const [benefit, setBenefit] = useState("");
   const [result, setResult] = useState(null);
-  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
-    setError("");
-    setResult(null);
+  const handleAnalyze = () => {
+    if (!cost || !benefit || Number(cost) <= 0) return;
 
-    try {
-      const payload = {
-        model_id: 1,
-        input_ref: "frontend-test",
-        cost: Number(cost),
-        benefit: Number(benefit),
-      };
+    const roi = ((benefit - cost) / cost) * 100;
 
-      const response = await createPrediction(payload);
+    const entry = {
+      cost: Number(cost),
+      benefit: Number(benefit),
+      roi: Number(roi.toFixed(2)),
+    };
 
-      // 🔥 Always compute ROI correctly
-      const roi =
-        payload.cost > 0
-          ? (((payload.benefit - payload.cost) / payload.cost) * 100).toFixed(2)
-          : 0;
-
-      setResult({
-        cost: payload.cost,
-        benefit: payload.benefit,
-        roi,
-      });
-    } catch (err) {
-      setError("Failed to calculate ROI");
-      console.error(err);
-    }
+    setResult(entry);
+    setHistory((prev) => [...prev, entry]);
   };
 
   return (
-    <div>
-      <input
-        type="number"
-        placeholder="Cost"
-        value={cost}
-        onChange={(e) => setCost(e.target.value)}
-      />
+    <div className="page-center">
+      <div className="roi-card">
+        <h1>AI ROI Performance Analyzer</h1>
+        <p>Evaluate cost vs benefit of AI models</p>
 
-      <input
-        type="number"
-        placeholder="Benefit"
-        value={benefit}
-        onChange={(e) => setBenefit(e.target.value)}
-      />
-
-      <button onClick={handleSubmit}>Analyze ROI</button>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {result && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Result:</h3>
-          <p>Cost: {result.cost}</p>
-          <p>Benefit: {result.benefit}</p>
-          <p>
-            ROI: <strong>{result.roi}%</strong>
-          </p>
+        <div className="input-row">
+          <input
+            type="number"
+            placeholder="Cost"
+            value={cost}
+            onChange={(e) => setCost(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Benefit"
+            value={benefit}
+            onChange={(e) => setBenefit(e.target.value)}
+          />
         </div>
-      )}
+
+        <button onClick={handleAnalyze}>Analyze ROI 🚀</button>
+
+        {result && (
+          <div className="result animate-in">
+            <div>Cost: ₹{result.cost}</div>
+            <div>Benefit: ₹{result.benefit}</div>
+            <div className="roi">ROI: {result.roi}%</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
