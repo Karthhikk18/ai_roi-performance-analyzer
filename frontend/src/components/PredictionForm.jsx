@@ -1,10 +1,13 @@
 import { useState } from "react";
 import "./PredictionForm.css";
+import ROITrendChart from "./ROITrendChart";
+import ProfitLossChart from "./ProfitLossChart";
 
-export default function PredictionForm({ history, setHistory }) {
+export default function PredictionForm() {
   const [cost, setCost] = useState("");
   const [benefit, setBenefit] = useState("");
   const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([]);
 
   const handleAnalyze = () => {
     if (!cost || !benefit || Number(cost) <= 0) return;
@@ -49,6 +52,18 @@ export default function PredictionForm({ history, setHistory }) {
             <div>Cost: ₹{result.cost}</div>
             <div>Benefit: ₹{result.benefit}</div>
             <div className="roi">ROI: {result.roi}%</div>
+          </div>
+        )}
+
+        {history.length > 0 && (
+          <div className="charts-inside">
+            <div className="chart-box">
+              <ROITrendChart history={history} />
+            </div>
+
+            <div className="chart-box" style={{ marginTop: "24px" }}>
+              <ProfitLossChart history={history} />
+            </div>
           </div>
         )}
       </div>

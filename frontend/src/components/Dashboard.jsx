@@ -1,3 +1,4 @@
+import "./Dashboard.css";
 export default function Dashboard({ history }) {
   const totalRuns = history.length;
 
